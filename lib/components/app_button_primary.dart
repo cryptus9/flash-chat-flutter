@@ -18,7 +18,7 @@ class AppButtonPrimary extends StatelessWidget {
       child: Material(
         elevation: 5.0,
         color: color,
-        borderRadius: BorderRadius.circular(30.0),
+        borderRadius: BorderRadius.circular(8.0),
         child: MaterialButton(
           onPressed: onTapFn,
           minWidth: 200.0,
