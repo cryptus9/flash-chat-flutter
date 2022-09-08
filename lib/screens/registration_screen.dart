@@ -1,3 +1,4 @@
+import 'package:flash_chat/components/app_button_primary.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -77,24 +78,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             Hero(
               tag: 'register',
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Material(
-                  color: Colors.blueAccent,
-                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                  elevation: 5.0,
-                  child: MaterialButton(
-                    onPressed: () {
-                      //Implement registration functionality.
-                    },
-                    minWidth: 200.0,
-                    height: 42.0,
-                    child: Text(
-                      'Register',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+              child: AppButtonPrimary(
+                text: "Register",
+                color: Colors.blueAccent,
+                onTapFn: () {
+                  // TODO
+                },
               ),
             ),
           ],
