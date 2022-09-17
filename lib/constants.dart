@@ -18,6 +18,10 @@ const kMessageContainerDecoration = BoxDecoration(
   ),
 );
 
+const kInputTextStyle = TextStyle(
+  color: Colors.black,
+);
+
 const kInputFieldDecoration = InputDecoration(
   hintText: 'Enter a value.',
   hintStyle: TextStyle(
@@ -36,4 +40,3 @@ const kInputFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(8.0)),
   ),
 );
-

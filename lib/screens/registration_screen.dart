@@ -1,14 +1,21 @@
 import 'package:flash_chat/components/app_button_primary.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = 'registration';
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+  String email;
+  String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,24 +37,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 48.0,
             ),
             TextField(
-              onChanged: (value) {
-                //Do something with the user input.
-              },
-              decoration: kInputFieldDecoration.copyWith(
-                hintText: 'Enter your Email',
-              )
-            ),
+                textAlign: TextAlign.center,
+                style: kInputTextStyle,
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration: kInputFieldDecoration.copyWith(
+                  hintText: 'Enter your Email',
+                )),
             SizedBox(
               height: 8.0,
             ),
             TextField(
-              onChanged: (value) {
-                //Do something with the user input.
-              },
-              decoration: kInputFieldDecoration.copyWith(
-                hintText: 'Enter your Password',
-              )
-            ),
+                textAlign: TextAlign.center,
+                style: kInputTextStyle,
+                onChanged: (value) {
+                  password = value;
+                },
+                decoration: kInputFieldDecoration.copyWith(
+                  hintText: 'Enter your Password',
+                )),
             SizedBox(
               height: 24.0,
             ),
@@ -56,8 +65,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: AppButtonPrimary(
                 text: "Register",
                 color: Colors.blueAccent,
-                onTapFn: () {
-                  // TODO
+                onTapFn: () async {
+                  try {
+                    final newUser = await _auth.createUserWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+                    if (newUser != null) {
+                      Navigator.pushNamed(context, ChatScreen.id);
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
                 },
               ),
             ),

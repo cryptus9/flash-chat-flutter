@@ -33,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
               child: TextField(
+                style: kInputTextStyle,
                 onChanged: (value) {
                   //Do something with the user input.
                 },
@@ -42,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             TextField(
+              style: kInputTextStyle,
               onChanged: (value) {
                 //Do something with the user input.
               },
