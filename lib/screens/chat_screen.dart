@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/components/confirmation_dialog.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -36,9 +37,17 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
-              onPressed: () {
-                _auth.signOut();
-                Navigator.pop(context);
+              onPressed: () async {
+                var userDidConfirm =
+                    await ConfirmationDialog.showConfirmationDialog(
+                  context,
+                  'Confirmation',
+                  'Do you want to log out?',
+                );
+                if (userDidConfirm) {
+                  _auth.signOut();
+                  Navigator.pop(context);
+                }
               }),
         ],
         title: Text('⚡️Chat'),

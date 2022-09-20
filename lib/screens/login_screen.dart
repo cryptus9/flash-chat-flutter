@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/components/app_button_primary.dart';
+import 'package:flash_chat/components/alert_dialog.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -78,8 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (newUser != null) {
                         Navigator.pushNamed(context, ChatScreen.id);
                       }
+                    } on FirebaseAuthException catch (e) {
+                      await DialogBuilder.showAlertDialog(context, e.message);
                     } catch (e) {
-                      print(e);
+                      print('unexcepted error');
                     }
                   }),
             ),
