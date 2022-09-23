@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/components/confirmation_dialog.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
-  final _auth = FirebaseAuth.instance;
   static String id = 'chat';
 
   @override
@@ -12,8 +12,10 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   User loggedInUser;
+  String currentMessage;
 
   @override
   void initState() {
@@ -66,14 +68,20 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: TextField(
                       onChanged: (value) {
-                        //Do something with the user input.
+                        currentMessage = value;
                       },
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
                     onPressed: () {
-                      //Implement send functionality.
+                      _firestore.collection('messages').add({
+                        'text': currentMessage,
+                        'sender': loggedInUser.email,
+                      }).then(
+                        (documentSnapshot) =>
+                            print("Added Data with ID: ${documentSnapshot.id}"),
+                      );
                     },
                     child: Text(
                       'Send',
