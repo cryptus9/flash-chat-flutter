@@ -14,6 +14,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  final _collectionId = 'messages';
+  final fieldText = TextEditingController();
   User loggedInUser;
   String currentMessage;
 
@@ -60,6 +62,38 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            StreamBuilder<QuerySnapshot>(
+              stream: _firestore.collection(_collectionId).snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.lightBlueAccent,
+                    ),
+                  );
+                }
+                var messages = snapshot.data.docs;
+                List<Text> messageList = [];
+                for (var message in messages) {
+                  var text = message.get('text');
+                  var sender = message.get('sender');
+                  messageList.add(
+                    Text(
+                      '$text from $sender',
+                      style: TextStyle(
+                        color: Colors.lightBlueAccent,
+                        fontSize: 20
+                      ),
+                    ),
+                  );
+                }
+                return Expanded(
+                  child: ListView(
+                    children: messageList,
+                  ),
+                );
+              },
+            ),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -67,6 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: fieldText,
                       onChanged: (value) {
                         currentMessage = value;
                       },
@@ -75,13 +110,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      _firestore.collection('messages').add({
+                      _firestore.collection(_collectionId).add({
                         'text': currentMessage,
                         'sender': loggedInUser.email,
-                      }).then(
-                        (documentSnapshot) =>
-                            print("Added Data with ID: ${documentSnapshot.id}"),
-                      );
+                      });
+                      fieldText.clear();
                     },
                     child: Text(
                       'Send',
